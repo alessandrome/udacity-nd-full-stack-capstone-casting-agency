@@ -16,7 +16,7 @@ def create_movie():
     movie.title = data['title']
     movie.release_date = data['release_date']
     movie.insert()
-    return jsonify(movie.long())
+    return jsonify(movie.long()), 201
 
 
 @auth.requires_auth('read:movie')
