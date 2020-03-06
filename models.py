@@ -88,6 +88,7 @@ class Actor(ModelAction):
     age = db.Column(db.Integer)
     gender = db.Column(db.String(32), nullable=True)
     movies = db.relationship('Movie', secondary='actor_movie_pivot', single_parent=True)
+    _available_genders = ['male', 'female', 'other']
 
     def short(self):
         return {
@@ -108,6 +109,10 @@ class Actor(ModelAction):
             'gender': self.gender,
             'movies': self.movies,
         }
+
+    @staticmethod
+    def get_available_genders():
+        return Actor._available_genders
 
 
 class Movie(ModelAction):
