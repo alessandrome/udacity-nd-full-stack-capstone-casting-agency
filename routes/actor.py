@@ -26,7 +26,7 @@ def create_actor():
 def get_actors():
     max_per_page = 50
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('perPage', 20, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
     q = Actor.query
     search_term = request.args.get('search_term', None, str)
     if search_term:

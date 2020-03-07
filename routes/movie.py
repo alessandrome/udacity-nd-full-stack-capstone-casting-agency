@@ -24,7 +24,7 @@ def create_movie():
 def get_movies():
     max_per_page = 50
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('perPage', 20, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
     q = Movie.query
     search_term = request.args.get('search_term', None, str)
     if search_term:
