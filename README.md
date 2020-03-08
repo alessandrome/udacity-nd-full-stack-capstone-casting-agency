@@ -125,7 +125,7 @@ psql casting-agency-test < casting-agency-test.psql
                     {
                         "id": 1,
                         "title": "Transformers",
-                        "release_date": "21-09-2007"
+                        "release_date": "2007-09-21"
                     }
                 ]
             },
@@ -153,7 +153,7 @@ psql casting-agency-test < casting-agency-test.psql
             {
                 "id": 1,
                 "title": "Transformers",
-                "release_date": "21-09-2007"
+                "release_date": "2007-09-21"
             }
         ]
     }
@@ -204,7 +204,7 @@ psql casting-agency-test < casting-agency-test.psql
     ```
     {
         "title "Transformers",
-        "release_date": "21-09-2007",
+        "release_date": "2007-09-21",
     }
     ```
   
@@ -214,7 +214,7 @@ psql casting-agency-test < casting-agency-test.psql
         {
             "id": 1,
             "title": "Transformers",
-            "release_date": "21-09-2007",
+            "release_date": "2007-09-21",
             "actors": []
         }
     }
@@ -234,7 +234,7 @@ psql casting-agency-test < casting-agency-test.psql
             {
                 "id": 1,
                 "title": "Transformers",
-                "release_date": "21-09-2007",
+                "release_date": "2007-09-21",
                 "actors": [
                     {
                         "id": 2,
@@ -262,7 +262,7 @@ psql casting-agency-test < casting-agency-test.psql
     {
         "id": 1,
         "title": "Transformers",
-        "release_date": "21-09-2007",
+        "release_date": "2007-09-21",
         "actors": [
             {
                 "id": 2,
@@ -287,7 +287,7 @@ psql casting-agency-test < casting-agency-test.psql
     ```
     {
         "title "Transformer - 2",
-        "release_date": "01-01-3299",
+        "release_date": "3299-01-01",
     }
     ```
   
@@ -296,7 +296,7 @@ psql casting-agency-test < casting-agency-test.psql
     {
         "id": 1,
         "title": "Transformer - 2",
-        "release_date": "01-01-3299",
+        "release_date": "3299-01-01",
     }
     ```
 - #### **DELETE /movies/:movie_id**

@@ -88,6 +88,7 @@ class Actor(ModelAction):
     age = db.Column(db.Integer)
     gender = db.Column(db.String(32), nullable=True)
     movies = db.relationship('Movie', secondary='actor_movie_pivot', single_parent=True)
+    actor_movie_pivot = db.relationship('ActorMoviePivot', cascade='all, delete-orphan', single_parent=True)
     _available_genders = ['male', 'female', 'other']
 
     def short(self):
@@ -121,22 +122,23 @@ class Movie(ModelAction):
     title = db.Column(db.String)
     release_date = db.Column(db.Date)
     actors = db.relationship('Actor', secondary='actor_movie_pivot', single_parent=True)
+    actor_movie_pivot = db.relationship('ActorMoviePivot', cascade='all, delete-orphan', single_parent=True)
 
-    def long(self):
+    def short(self):
         return {
             'id': self.id,
             'title': self.title,
-            'release_date': self.release_date
+            'release_date': str(self.release_date)
         }
 
-    def short(self):
+    def long(self):
         actors = []
         for actor in self.actors:
             actors.append(actor.short())
         return {
             'id': self.id,
             'title': self.title,
-            'release_date': self.release_date,
+            'release_date': str(self.release_date),
             'actors': actors,
         }
 
@@ -146,8 +148,8 @@ class ActorMoviePivot(ModelAction):
     id = db.Column(db.Integer, primary_key=True)
     actor_id = db.Column(db.Integer, db.ForeignKey('actors.id'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
-    actor = db.relationship('Actor', cascade='all, delete-orphan', single_parent=True)
-    movie = db.relationship('Movie', cascade='all, delete-orphan', single_parent=True)
+    actor = db.relationship('Actor')
+    movie = db.relationship('Movie')
     __table_args__ = (db.UniqueConstraint('actor_id', 'movie_id', name='actor_movie_unique_participation_key'),)
 
     def long(self):

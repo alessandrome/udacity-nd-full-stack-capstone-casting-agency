@@ -17,6 +17,7 @@ class ActorUnittest(dbunittest.DbUnittest):
         self.actors_id_to_delete.append(test_actor.id)
         self.assertEqual(res.status_code, 201)  # 201 code for 'Resource Created'
         self.assertIn('id', data)
+        self.actors_id_to_delete.append(data['id'])
         self.assertEqual(data['name'], json_data['name'])
         self.assertEqual(data['age'], json_data['age'])
         self.assertEqual(data['gender'], json_data['gender'])
