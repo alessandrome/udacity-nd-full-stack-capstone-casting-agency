@@ -107,7 +107,7 @@ class Actor(ModelAction):
             'name': self.name,
             'age': self.age,
             'gender': self.gender,
-            'movies': self.movies,
+            'movies': movies,
         }
 
     @staticmethod
@@ -146,8 +146,8 @@ class ActorMoviePivot(ModelAction):
     id = db.Column(db.Integer, primary_key=True)
     actor_id = db.Column(db.Integer, db.ForeignKey('actors.id'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
-    actor = db.relationship('Actor', cascade='all, delete-orphan')
-    movie = db.relationship('Movie', cascade='all, delete-orphan')
+    actor = db.relationship('Actor', cascade='all, delete-orphan', single_parent=True)
+    movie = db.relationship('Movie', cascade='all, delete-orphan', single_parent=True)
     __table_args__ = (db.UniqueConstraint('actor_id', 'movie_id', name='actor_movie_unique_participation_key'),)
 
     def long(self):

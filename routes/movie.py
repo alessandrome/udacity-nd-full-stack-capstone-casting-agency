@@ -66,7 +66,7 @@ def patch_movie(movie_id):
 
 
 @auth.requires_auth('delete:movie')
-@movie_blueprint.route('/movies/<int:movie_id>', methods=['PATCH'])
+@movie_blueprint.route('/movies/<int:movie_id>', methods=['DELETE'])
 def delete_movie(movie_id):
     movie = Movie.query.filter(Movie.id == movie_id).first()
     if not movie:

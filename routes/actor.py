@@ -47,7 +47,7 @@ def get_actors():
 @auth.requires_auth('read:actor')
 @actor_blueprint.route('/actors/<int:actor_id>')
 def get_actor(actor_id):
-    actor = Actor.query.filter(Actor.id == actor_id)
+    actor = Actor.query.filter(Actor.id == actor_id).first()
     if not actor:
         return errors.not_found_error('Actor not found')
     return jsonify(actor.long())
@@ -56,7 +56,7 @@ def get_actor(actor_id):
 @auth.requires_auth('update:actor')
 @actor_blueprint.route('/actors/<int:actor_id>', methods=['PATCH'])
 def patch_actor(actor_id):
-    actor = Actor.query.filter(Actor.id == actor_id)
+    actor = Actor.query.filter(Actor.id == actor_id).first()
     if not actor:
         return errors.not_found_error('Actor not found')
     data = request.json
@@ -71,9 +71,9 @@ def patch_actor(actor_id):
 
 
 @auth.requires_auth('delete:actor')
-@actor_blueprint.route('/actors/<int:actor_id>', methods=['PATCH'])
+@actor_blueprint.route('/actors/<int:actor_id>', methods=['DELETE'])
 def delete_actor(actor_id):
-    actor = Actor.query.filter(Actor.id == actor_id)
+    actor = Actor.query.filter(Actor.id == actor_id).first()
     if not actor:
         return errors.not_found_error('Actor not found')
     actor.delete()
