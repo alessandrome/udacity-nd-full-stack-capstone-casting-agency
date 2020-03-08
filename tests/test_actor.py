@@ -31,7 +31,7 @@ class ActorUnittest(dbunittest.DbUnittest):
         self.assertIn('pages', data)
         self.assertGreaterEqual(data['total_items'], len(data['items']))
 
-    def test_question_list_search(self):
+    def test_actor_list_search(self):
         search_term = 'daniel'
         res = self.client().get('/actors?page=1&search_term={}'.format(search_term))
         data = json.loads(res.data)
