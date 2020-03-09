@@ -17,7 +17,13 @@ def create_actor():
     actor.name = data['name']
     actor.age = data['age']
     actor.gender = data['gender'].lower()
-    actor.insert()
+    db.session.add(actor)
+    db.session.flush()
+    if 'movies' in data:
+        movies = Movie.query.filter(Movie.id.in_(data['movies'])).all()
+        for movie in movies:
+            actor.movies.append(movie)
+    db.session.commit()
     return jsonify(actor.long()), 201
 
 
@@ -66,7 +72,12 @@ def patch_actor(actor_id):
         actor.age = data['age']
     if 'gender' in data and data['gender'].lower() in Actor.get_available_genders():
         actor.gender = data['gender'].lower()
-    actor.update()
+    if 'movies' in data:
+        movies = Movie.query.filter(Movie.id.in_(data['movies'])).all()
+        actor.movies = []
+        for movie in movies:
+            actor.movies.append(movie)
+    db.session.commit()
     return jsonify(actor.long())
 
 

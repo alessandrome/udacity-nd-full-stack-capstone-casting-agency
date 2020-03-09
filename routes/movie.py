@@ -15,7 +15,13 @@ def create_movie():
     movie = Movie()
     movie.title = data['title']
     movie.release_date = data['release_date']
-    movie.insert()
+    db.session.add(movie)
+    db.session.flush()
+    if 'actors' in data:
+        actors = Actor.query.filter(Actor.id.in_(data['actors'])).all()
+        for actor in actors:
+            movie.actors.append(actor)
+    db.session.commit()
     return jsonify(movie.long()), 201
 
 
@@ -62,6 +68,12 @@ def patch_movie(movie_id):
         movie.title = data['title']
     if 'release_date' in data:
         movie.release_date = data['release_date']
+    if 'actors' in data:
+        actors = Actor.query.filter(Actor.id.in_(data['actors'])).all()
+        movie.actors = []
+        for actor in actors:
+            movie.actors.append(actor)
+    db.session.commit()
     return jsonify(movie.long())
 
 
