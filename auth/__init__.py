@@ -1,6 +1,6 @@
 import os
 import json
-from flask import request, _request_ctx_stack, session
+from flask import request, _request_ctx_stack, session, jsonify
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
@@ -90,7 +90,7 @@ def verify_decode_jwt(token):
         payload = jwt.decode(token, JWK, ALGORITHMS, audience=API_AUDIENCE)
         return payload
     except Exception as e:
-        raise AuthError(repr(e), 401)
+        raise AuthError(repr(e), 403)
 
 
 '''
@@ -113,8 +113,10 @@ def requires_auth(permission=''):
                 if permission:
                     check_permissions(permission, payload)
                 return f(payload, *args, **kwargs)
+            except AuthError as e:
+                return jsonify({'error': e.error}), e.status_code
             except Exception as e:
-                return errors.unauthorized_error(str(e))
+                return jsonify({'error': str(e)}), 400
         return wrapper
     return requires_auth_decorator
 
