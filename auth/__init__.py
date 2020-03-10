@@ -4,6 +4,7 @@ from flask import request, _request_ctx_stack, session
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
+import errors
 from models import User, UserAccount
 
 
@@ -106,11 +107,14 @@ def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            token = get_token_auth_header()
-            payload = verify_decode_jwt(token)
-            if permission:
-                check_permissions(permission, payload)
-            return f(payload, *args, **kwargs)
+            try:
+                token = get_token_auth_header()
+                payload = verify_decode_jwt(token)
+                if permission:
+                    check_permissions(permission, payload)
+                return f(payload, *args, **kwargs)
+            except Exception as e:
+                return errors.unauthorized_error(str(e))
         return wrapper
     return requires_auth_decorator
 

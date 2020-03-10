@@ -8,9 +8,9 @@ import errors
 movie_blueprint = Blueprint('movie', __name__)
 
 
-@auth.requires_auth('create:movie')
 @movie_blueprint.route('/movies', methods=['POST'])
-def create_movie():
+@auth.requires_auth('create:movie')
+def create_movie(jwt_payload):
     data = request.json
     movie = Movie()
     movie.title = data['title']
@@ -25,9 +25,9 @@ def create_movie():
     return jsonify(movie.long()), 201
 
 
-@auth.requires_auth('read:movie')
 @movie_blueprint.route('/movies')
-def get_movies():
+@auth.requires_auth('read:movie')
+def get_movies(jwt_payload):
     max_per_page = 50
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 20, type=int)
@@ -48,18 +48,18 @@ def get_movies():
     return jsonify(return_data)
 
 
-@auth.requires_auth('read:movie')
 @movie_blueprint.route('/movies/<int:movie_id>')
-def get_movie(movie_id):
+@auth.requires_auth('read:movie')
+def get_movie(jwt_payload, movie_id):
     movie = Movie.query.filter(Movie.id == movie_id).first()
     if not movie:
         return errors.not_found_error('Movie not found')
     return jsonify(movie.long())
 
 
-@auth.requires_auth('update:movie')
 @movie_blueprint.route('/movies/<int:movie_id>', methods=['PATCH'])
-def patch_movie(movie_id):
+@auth.requires_auth('update:movie')
+def patch_movie(jwt_payload, movie_id):
     movie = Movie.query.filter(Movie.id == movie_id).first()
     if not movie:
         return errors.not_found_error('Movie not found')
@@ -77,9 +77,9 @@ def patch_movie(movie_id):
     return jsonify(movie.long())
 
 
-@auth.requires_auth('delete:movie')
 @movie_blueprint.route('/movies/<int:movie_id>', methods=['DELETE'])
-def delete_movie(movie_id):
+@auth.requires_auth('delete:movie')
+def delete_movie(jwt_payload, movie_id):
     movie = Movie.query.filter(Movie.id == movie_id).first()
     if not movie:
         return errors.not_found_error('Movie not found')

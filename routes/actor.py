@@ -9,9 +9,9 @@ import errors
 actor_blueprint = Blueprint('actor', __name__)
 
 
-@auth.requires_auth('create:actor')
 @actor_blueprint.route('/actors', methods=['POST'])
-def create_actor():
+@auth.requires_auth('create:actor')
+def create_actor(jwt_payload):
     actor = Actor()
     data = request.json
     actor.name = data['name']
@@ -27,9 +27,9 @@ def create_actor():
     return jsonify(actor.long()), 201
 
 
-@auth.requires_auth('read:actor')
 @actor_blueprint.route('/actors')
-def get_actors():
+@auth.requires_auth('read:actor')
+def get_actors(jwt_payload):
     max_per_page = 50
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 20, type=int)
@@ -50,18 +50,18 @@ def get_actors():
     return jsonify(returned_data)
 
 
-@auth.requires_auth('read:actor')
 @actor_blueprint.route('/actors/<int:actor_id>')
-def get_actor(actor_id):
+@auth.requires_auth('read:actor')
+def get_actor(jwt_payload, actor_id):
     actor = Actor.query.filter(Actor.id == actor_id).first()
     if not actor:
         return errors.not_found_error('Actor not found')
     return jsonify(actor.long())
 
 
-@auth.requires_auth('update:actor')
 @actor_blueprint.route('/actors/<int:actor_id>', methods=['PATCH'])
-def patch_actor(actor_id):
+@auth.requires_auth('update:actor')
+def patch_actor(jwt_payload, actor_id):
     actor = Actor.query.filter(Actor.id == actor_id).first()
     if not actor:
         return errors.not_found_error('Actor not found')
@@ -81,9 +81,9 @@ def patch_actor(actor_id):
     return jsonify(actor.long())
 
 
-@auth.requires_auth('delete:actor')
 @actor_blueprint.route('/actors/<int:actor_id>', methods=['DELETE'])
-def delete_actor(actor_id):
+@auth.requires_auth('delete:actor')
+def delete_actor(jwt_payload, actor_id):
     actor = Actor.query.filter(Actor.id == actor_id).first()
     if not actor:
         return errors.not_found_error('Actor not found')
